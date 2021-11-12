@@ -3,12 +3,6 @@ SCRIPTNAME=$(basename $0)
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 IFS=$'\n'
 
-if [[ -n $THEME ]]; then
-    fzf_color="--color=$THEME"
-fi
-
-# $THEME env variable set via sway config.
-
 # check for env variable, if exists we are the
 # forked shell, get the waiting string from the fifo
 # and call fzf and sway from there.
@@ -25,12 +19,12 @@ if [[ -n $fifo ]]; then
         exit
     fi
 
-    swaymsg [con_id="$id"] focus
+    i3-msg [con_id="$id"] focus
     notify-send -u low "moved to window $selection"
     exit
 fi
 
-windows=($(swaymsg -t get_tree| jq -r 'recurse(.nodes[]?) | recurse(.floating_nodes[]?) | select(.type=="con"), select(.type=="floating_con") | select((.app_id != null) or .name != null) | {id, app_id, name} | .id, .app_id, .name'))
+windows=($(i3-msg -t get_tree| jq -r 'recurse(.nodes[]?) | recurse(.floating_nodes[]?) | select(.type=="con"), select(.type=="floating_con") | select((.app_id != null) or .name != null) | select(.name|test("^(?!polybar).*$")) | select(.name|test("^(?!content).*$")) | {id, app_id, name} | .id, .app_id, .name'))
 
 # build the selection string we will ultimate
 # pipe to fzf, take note of largest string to set
@@ -78,6 +72,6 @@ fifo=$fifo zsh -c "alacritty \
     -o font.size=16.0 \
     -o window.padding.x=20 \
     -o window.padding.y=20 \
-    --title "fzf-switcher" \
+    --title \"Tree Switcher\" \
     -e $SCRIPTPATH/$SCRIPTNAME"&
 echo -n $str > $fifo

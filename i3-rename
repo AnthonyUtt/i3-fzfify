@@ -6,11 +6,11 @@ SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 # be set.
 if [[ -n $SR ]]; then
     echo ""
-    echo " Rename workspace to?" |  pv -qL $[20+(-2 + RANDOM%5)]
+    echo " Rename workspace to?"
     echo ""
-    echo -n "  "
+    echo -n " > "
     read newname
-    swaymsg rename workspace to $newname
+    i3-msg rename workspace to $newname
 fi
 
 # launch alacritty instance with the size we want
@@ -21,5 +21,5 @@ SR=true zsh -c "alacritty \
     -o font.size=16.0 \
     -o window.padding.x=20 \
     -o window.padding.y=20 \
-    --title "fzf-switcher" \
+    --title \"Rename Workspace\" \
     -e $SCRIPTPATH/$SCRIPTNAME"&

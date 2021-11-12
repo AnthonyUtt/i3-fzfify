@@ -1,3 +1,10 @@
-# any window with the title "fzf-switcher" will be floating
-for_window [title="fzf-switcher"] floating enable
+# Using multiple window titles for polybar title display
 
+for_window [title="Set Window Mark"] floating enable
+for_window [title="Switch to Mark"] floating enable
+for_window [title="New Workspace"] floating enable
+for_window [title="Rename Workspace"] floating enable
+for_window [title="Tree Switcher"] floating enable
+for_window [title="Move Window to Workspace"] floating enable
+for_window [title="Move Workspace"] floating enable
+for_window [title="Switch Workspace"] floating enable
